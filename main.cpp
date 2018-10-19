@@ -3,52 +3,41 @@
 #include <cstring>
 #include "CabecalhoDados.hpp"
 #include "ArquivoDados.hpp"
+#include "ArquivoIndice.hpp"
 using namespace std;
 int main ()
 {
-   Arquivo *arq = new ArquivoDados("teste.bin");
-   
-   Medico t1;
-   Medico t2;
-   Medico t3;
-   Medico t4;
-   
-   t1.id = 1;
-   t1.crm = 99;
-   t2.id = 2;
-   strcpy(t2.nome,"wef");
-   t2.crm = 98;
-   t3.id = 50;
-   t4.id = 40;
+   ArquivoDados  *arq  = new ArquivoDados("dados.bin");
+   ArquivoIndice *arq2 = new ArquivoIndice("indice.bin");
 
-   arq->insere(t1);
-   arq->insere(t2);
-   arq->insere(t3);
-   arq->insere(t4);
+   Medico m1;
+   Medico m2;
+   Medico m3;
 
-   FILE *teste = fopen("teste.bin", "rb");
-   CabecalhoDados *cab = new CabecalhoDados();
-   fseek(teste, 0, SEEK_SET);
-   fread(cab, sizeof(CabecalhoDados), 1, teste);
-   fclose(teste);
+   m1.id = 1000;
+   m2.id = 2000;
+   m3.id = 3000;
 
-   cout << "CABECALHO: \n";
-   cout << cab->getPosCabeca() << "\n";
-   cout << cab->getPosTopo() << "\n";
-   cout << cab->getPosLivre() << "\n";
+   int pos;
+   pos = arq->insere(m1);
+   arq2->insere(m1.id, pos);
+   pos = arq->insere(m2);
+   arq2->insere(m2.id, pos);
+   pos = arq->insere(m3);
+   arq2->insere(m3.id, pos);
 
-   NoMedico *med1 = arq->getData(0);
-   NoMedico *med2 = arq->getData(1);
-   NoMedico *med3 = arq->getData(2);
-   NoMedico *med4 = arq->getData(3);
+   NoMedico  *med1 = arq->getData(0);
+   NoMedico  *med2 = arq->getData(1);
+   NoMedico  *med3 = arq->getData(2);
+   BTreeNode *no1  = BTreeNode::getNode (arq2->in, 0);
 
-   cout << "Id-Medico 1:[" << med1->medico.crm << "]\n";
-   cout << "Id-Medico 2:[" << med2->medico.nome << "]\n";
-   cout << "Id-Medico 3:[" << med3->medico.id << "]\n";
-   cout << "Id-Medico 4:[" << med4->medico.id << "]\n";
+   cout << med1->medico.id << "\n";
+   cout << no1->chaves[0] << "\n";
+   cout << med2->medico.id << "\n";
+   cout << no1->chaves[1] << "\n";
+   cout << med3->medico.id << "\n";
+   cout << no1->chaves[2] << "\n";
 
- //  delete med1;
- //  delete med2;
- //  delete arq;
+
    return 0;
 }

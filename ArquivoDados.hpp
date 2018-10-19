@@ -13,7 +13,7 @@ class ArquivoDados : public Arquivo
 
    public:
       ArquivoDados (const std::string&);
-      void insere (Medico);
+      int insere (Medico);
       NoMedico* getData (int);
 
    private:

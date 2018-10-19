@@ -18,6 +18,9 @@ class ArquivoIndice : public Arquivo
       //fazer hoje
       //recebe chave e indice
       void insere (int, int);
+
+   private:
+      bool insereAux (int, int, int);
 };
 
 #endif // !ARQUIVOINDICE_HPP

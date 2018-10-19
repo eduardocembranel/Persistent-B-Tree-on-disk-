@@ -8,7 +8,7 @@
 
 class Arquivo
 {
-   protected:
+   public: //mudar para protected dps
       std::string fileName;
       std::ifstream in;
       std::ofstream out;
@@ -16,8 +16,8 @@ class Arquivo
       Arquivo (const std::string&);
    
    public:
-      virtual void insere (Medico) = 0;
-      virtual NoMedico* getData (int) = 0;
+     // virtual void insere (Medico);
+     // virtual NoMedico* getData (int);
       
 };
 

@@ -10,8 +10,9 @@ ArquivoDados::ArquivoDados (const std::string &fileName) : Arquivo(fileName)
    this->cab->setCabecalho(this->out); //coloca o cabecalho no arquivo
 }
 
-void ArquivoDados::insere (Medico medico)
+int ArquivoDados::insere (Medico medico)
 {
+   int indice;
    NoMedico x;
    x.setMedico(medico);
    x.setProx(this->cab->getPosCabeca());
@@ -19,6 +20,7 @@ void ArquivoDados::insere (Medico medico)
    if (this->cab->getPosLivre() == -1) //n ha nós livres
    {
       this->insereNo(&x, this->cab->getPosTopo());
+      indice = this->cab->getPosTopo();
       this->cab->setPosCabeca(this->cab->getPosTopo());
       this->cab->incTopo();
    }
@@ -26,11 +28,13 @@ void ArquivoDados::insere (Medico medico)
    {
       NoMedico *aux = this->getData(this->cab->getPosLivre());
       this->insereNo(&x, this->cab->getPosLivre());
+      indice = this->cab->getPosLivre();
       this->cab->setPosCabeca(this->cab->getPosLivre());
       this->cab->setPosLivre(aux->getProx());
       delete aux;
    }
    this->cab->setCabecalho(this->out);
+   return indice;
 }
 
 void ArquivoDados::insereNo (NoMedico *elem, int pos)

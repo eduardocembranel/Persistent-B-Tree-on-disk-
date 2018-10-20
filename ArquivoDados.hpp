@@ -14,8 +14,9 @@ class ArquivoDados : public Arquivo
    public:
       ArquivoDados (const std::string&);
       int insere (Medico);
-      NoMedico* getData (int);
-
+      NoMedico getData (int);
+      ~ArquivoDados ();
+      
    private:
       void insereNo (NoMedico*, int);
 };

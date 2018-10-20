@@ -5,6 +5,8 @@
 #include "CabecalhoIndice.hpp"
 #include "BTreeNode.hpp"
 
+#include <vector>
+
 //insere chave + indice
 //arquivo contem BTreeNode
 class ArquivoIndice : public Arquivo
@@ -15,11 +17,12 @@ class ArquivoIndice : public Arquivo
    public:
       ArquivoIndice (const std::string &);
 
-      //fazer hoje
-      //recebe chave e indice
       void insere (int, int);
       void mostrarPorNivel ();
-      int altura();
+      int altura ();
+      int getIndice (int); //dada uma chave
+      std::vector<int> getIndices ();
+      ~ArquivoIndice ();
 
    private:
       bool insereAux (int, int, int);
@@ -27,6 +30,8 @@ class ArquivoIndice : public Arquivo
       int insereNaoRaiz (BTreeNode*);
       int alturaAux (int);
       void mostraNivel (int, int);
+      void getIndicesAux (int, std::vector<int> &);
+      int getIndiceAux (int, int);
 };
 
 #endif // !ARQUIVOINDICE_HPP

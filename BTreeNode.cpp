@@ -1,7 +1,5 @@
 #include "BTreeNode.hpp"
 #include "CabecalhoIndice.hpp"
-#include <iostream>
-using namespace std;
 
 BTreeNode::BTreeNode (int chave, int indice)
 {
@@ -66,7 +64,6 @@ BTreeNode* BTreeNode::split (BTreeNode *&node, int *medChave, int *medIndice)
       novo->chaves[j]  = node->chaves[i];
       novo->indices[j] = node->indices[i];
       node->filhos[i]  = -1;
-   
       ++novo->numChaves;
       --node->numChaves;
    }

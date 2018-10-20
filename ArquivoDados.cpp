@@ -26,12 +26,11 @@ int ArquivoDados::insere (Medico medico)
    }
    else
    {
-      NoMedico *aux = this->getData(this->cab->getPosLivre());
+      NoMedico aux = this->getData(this->cab->getPosLivre());
       this->insereNo(&x, this->cab->getPosLivre());
       indice = this->cab->getPosLivre();
       this->cab->setPosCabeca(this->cab->getPosLivre());
-      this->cab->setPosLivre(aux->getProx());
-      delete aux;
+      this->cab->setPosLivre(aux.getProx());
    }
    this->cab->setCabecalho(this->out);
    return indice;
@@ -44,11 +43,15 @@ void ArquivoDados::insereNo (NoMedico *elem, int pos)
    this->out.flush();
 }
 
-NoMedico* ArquivoDados::getData (int pos)
+NoMedico ArquivoDados::getData (int pos)
 {
-   NoMedico *x = new NoMedico();
+   NoMedico x;
    this->in.seekg(sizeof(CabecalhoDados) + pos * sizeof(NoMedico));
-   this->in.read((char*)x, sizeof(NoMedico));
+   this->in.read((char*)&x, sizeof(NoMedico));
    return x;
 }
 
+ArquivoDados::~ArquivoDados ()
+{
+   delete this->cab;
+}

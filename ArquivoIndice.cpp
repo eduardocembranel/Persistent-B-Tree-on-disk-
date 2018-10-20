@@ -1,5 +1,8 @@
-#include "ArquivoIndice.hpp"
 #include <iostream>
+
+#include "ArquivoIndice.hpp"
+#include "Util.hpp"
+
 using namespace std;
 
 ArquivoIndice::ArquivoIndice (const std::string &fileName) : Arquivo(fileName)
@@ -169,23 +172,82 @@ void ArquivoIndice::mostraNivel (int nivel, int pos)
 
 void ArquivoIndice::mostrarPorNivel ()
 {
+   Util::clear();
+   std::cout << "[Arvore B por nivel]\n\n";
+   
    int h = this->altura();
-
    if (h == 0) 
    {
-      cout << "VAZIA\n";
-      return;
+      cout << "Arvore vazia!\n";
    }
+   else
+   {
+      //printa a raiz;
+      BTreeNode *no1  = BTreeNode::getNode (in, this->cab->getPosRaiz());
+      for (int i = 0; i < no1->numChaves; ++i)
+         cout << "[" << no1->chaves[i] << "]"; //mudar a sintaxe disso dps
+      cout << "\n";
 
-   //printa a raiz;
-   BTreeNode *no1  = BTreeNode::getNode (in, this->cab->getPosRaiz());
-   for (int i = 0; i < no1->numChaves; ++i)
-      cout << "[" << no1->chaves[i] << "]";
-   cout << "\n";
-
-   for (int i = 2; i <= h; ++i)
-   { 
-      mostraNivel(i, this->cab->getPosRaiz());
-      std::cout << "\n";
+      for (int i = 2; i <= h; ++i)
+      { 
+         mostraNivel(i, this->cab->getPosRaiz());
+         std::cout << "\n";
+      }
    }
+   Util::pressRetornar();
+}
+
+std::vector<int> ArquivoIndice::getIndices ()
+{
+   std::vector<int> indices;
+
+   if (this->cab->getPosRaiz() != -1)
+      getIndicesAux(this->cab->getPosRaiz(), indices);
+   
+   return indices;
+}
+
+void ArquivoIndice::getIndicesAux (int pos, std::vector<int> &indices)
+{
+   BTreeNode *no = BTreeNode::getNode(this->in, pos);
+   
+   int i;
+   for (i = 0; i < no->numChaves; ++i)
+   {
+      if (no->isLeaf() == false)
+         this->getIndicesAux(no->filhos[i], indices);
+      indices.push_back(no->indices[i]);
+   }
+   if (no->isLeaf() == false)
+      this->getIndicesAux(no->filhos[i], indices);
+
+   delete no;
+}
+
+int ArquivoIndice::getIndice (int chave)
+{
+   if (this->cab->getPosRaiz() == -1)
+      return -1;
+
+   return getIndiceAux (chave, this->cab->getPosRaiz());
+}
+
+int ArquivoIndice::getIndiceAux (int chave, int pos)
+{
+   if (pos == -1) return -1;
+
+   BTreeNode *no = BTreeNode::getNode(this->in, pos);
+   int i = 0;
+   while (i < no->numChaves && chave > no->chaves[i])
+      ++i;
+
+   if (i < no->numChaves && chave == no->chaves[i]) //achou
+      return no->indices[i];
+
+   return getIndiceAux(chave, no->filhos[i]);
+}
+
+ArquivoIndice::~ArquivoIndice ()
+{
+   delete this->cab;
 }

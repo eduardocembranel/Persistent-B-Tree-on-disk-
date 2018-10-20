@@ -6,3 +6,9 @@ Arquivo::Arquivo (const std::string &fileName)
    this->out.open(fileName, std::ios::out | std::ios::binary);
    this->in.open(fileName, std::ios::in | std::ios::binary);
 }
+
+Arquivo::~Arquivo ()
+{
+   this->out.close();
+   this->in.close();
+}

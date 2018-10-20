@@ -14,6 +14,7 @@ class Arquivo
       std::ofstream out;
 
       Arquivo (const std::string&);
+      ~Arquivo ();
    
    public:
      // virtual void insere (Medico);

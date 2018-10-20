@@ -1,4 +1,9 @@
+#include <cstdlib>
+#include <iostream>
+#include <limits>
+
 #include "Util.hpp"
+
 using namespace std;
 
 Util::Util () {}
@@ -23,4 +28,21 @@ std::vector<std::string> Util::splitString (std::string s, char c)
         }
     }
     return subArray;
+}
+
+void Util::clear ()
+{
+   system("cls");
+}
+
+void Util::pressRetornar ()
+{
+   std::cout << "\nPressione qualquer tecla para retornar...";
+   Util::flushInput();
+}
+
+void Util::flushInput ()
+{
+   std::cin.clear();
+   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }

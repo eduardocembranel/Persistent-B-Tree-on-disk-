@@ -18,7 +18,10 @@ class App
       void imprimirCadastro ();
       void insereDado ();
       void buscaMedico ();
+      void alteraMedico ();
       void mostraMenu ();
+      void carregaArquivo ();
+      bool ehValida (std::vector<std::string>);
 
       enum MenuEstado
       {

@@ -2,7 +2,8 @@
 
 std::ostream& operator<< (std::ostream &out, const Medico &medico)
 {
-   out << "Medico:        " << medico.nome          << "\n"
+   out << "\n"
+       << "Medico:        " << medico.nome          << "\n"
        << "Id:            " << medico.id            << "\n"
        << "Nascimento:    " << medico.nascimento    << "\n"
        << "Sexo:          " << medico.sexo          << "\n"

@@ -159,9 +159,10 @@ void ArquivoIndice::mostraNivel (int nivel, int pos)
 
    if (nivel == 1)
    {
-      for (int i = 0; i < no->numChaves; ++i)
-         std::cout << "[" << no->chaves[i] << "]";
-      std::cout << "  ";
+      std::cout << "[";
+      for (int i = 0; i < no->numChaves - 1; ++i)
+         std::cout << no->chaves[i] << ",";
+      std::cout << no->chaves[no->numChaves - 1] << "] ";
    }
    else if (nivel > 1) 
    { 
@@ -183,13 +184,14 @@ void ArquivoIndice::mostrarPorNivel ()
    else
    {
       //printa a raiz;
-      BTreeNode *no1  = BTreeNode::getNode (in, this->cab->getPosRaiz());
-      for (int i = 0; i < no1->numChaves; ++i)
-         cout << "[" << no1->chaves[i] << "]"; //mudar a sintaxe disso dps
-      cout << "\n";
+      BTreeNode *no  = BTreeNode::getNode (in, this->cab->getPosRaiz());
+      std::cout << "[";
+      for (int i = 0; i < no->numChaves - 1; ++i)
+         cout << no->chaves[i] << ",";
+      cout << no->chaves[no->numChaves - 1] << "]\n";
 
       for (int i = 2; i <= h; ++i)
-      { 
+      {
          mostraNivel(i, this->cab->getPosRaiz());
          std::cout << "\n";
       }

@@ -14,11 +14,12 @@ class ArquivoDados : public Arquivo
    public:
       ArquivoDados (const std::string&);
       int insere (Medico);
+      void insereNo (NoMedico*, int);
       NoMedico getData (int);
       ~ArquivoDados ();
       
    private:
-      void insereNo (NoMedico*, int);
+      
 };
 
 #endif // !ARQUIVODADOS_HPP

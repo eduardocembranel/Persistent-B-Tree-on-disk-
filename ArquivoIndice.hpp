@@ -18,9 +18,15 @@ class ArquivoIndice : public Arquivo
       //fazer hoje
       //recebe chave e indice
       void insere (int, int);
+      void mostrarPorNivel ();
+      int altura();
 
    private:
       bool insereAux (int, int, int);
+      void insereRaiz (BTreeNode*);
+      int insereNaoRaiz (BTreeNode*);
+      int alturaAux (int);
+      void mostraNivel (int, int);
 };
 
 #endif // !ARQUIVOINDICE_HPP

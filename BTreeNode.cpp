@@ -3,19 +3,20 @@
 #include <iostream>
 using namespace std;
 
-BTreeNode::BTreeNode (int chave, int indice, int prox)
+BTreeNode::BTreeNode (int chave, int indice)
 {
    this->numChaves  = 1;
    this->chaves[0]  = chave;
    this->indices[0] = indice;
    for (int i = 0; i < ORDEM + 1; ++i)
       this->filhos[i] = -1;
-   this->prox = prox;
 }
 
 BTreeNode::BTreeNode ()
 {
-
+   for (int i = 0; i < ORDEM + 1; ++i)
+      this->filhos[i] = -1;
+   this->numChaves = 0;
 }
 
 void BTreeNode::setProx (int prox)
@@ -51,4 +52,30 @@ void BTreeNode::setNode (std::ofstream &file, int pos)
    file.seekp(sizeof(CabecalhoIndice) + pos * sizeof(BTreeNode));
    file.write((char*)this, sizeof(BTreeNode));
    file.flush();
+}
+
+BTreeNode* BTreeNode::split (BTreeNode *&node, int *medChave, int *medIndice)
+{
+   BTreeNode *novo = new BTreeNode();
+   int posMed = 2; // -> numchave / 2
+   int i, j, fim = node->numChaves;
+
+   for (i = posMed + 1, j = 0; i < fim; ++i, ++j)
+   {
+      novo->filhos[j]  = node->filhos[i];
+      novo->chaves[j]  = node->chaves[i];
+      novo->indices[j] = node->indices[i];
+      node->filhos[i]  = -1;
+   
+      ++novo->numChaves;
+      --node->numChaves;
+   }
+
+   novo->filhos[j] = node->filhos[i];
+   node->filhos[i] = -1;
+   *medChave  = node->chaves[posMed];
+   *medIndice = node->indices[posMed];
+   --node->numChaves;
+
+   return novo;
 }

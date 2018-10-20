@@ -1,0 +1,29 @@
+classe App
+
+public:
+  static void run ();
+
+private:
+  static void exibeOpcoes ();
+  
+  //1,2,3,4,5,6,7,-1
+  static int getEscolha ();
+
+  static void distribuiEscolha();
+
+getters e setters -> classe medico
+construtor da classe medico
+
+//insere no arquivo de indice e no arquivo de dados (utiliza
+//as 2 funcoes insere (de arquivoDados e arquivoIndice)
+void insere(Medico med);
+
+ //le linha por linha do arquivo com 
+ //a funcao getline (padrao c++)
+ //usa a splitString da classe Util e para cada linha lida
+ //inicializar um medico e inserir o elemento nos arquivos
+void loadArqEntrada (std::string fileName);
+
+
+
+

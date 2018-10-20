@@ -15,7 +15,7 @@ class BTreeNode
       int prox;
 
    public:
-      BTreeNode (int, int, int);
+      BTreeNode (int, int);
       BTreeNode ();
       void setProx (int);
       int getProx ();
@@ -23,6 +23,7 @@ class BTreeNode
       bool isLeaf ();
       void setNode (std::ofstream &, int);
       static BTreeNode* getNode (std::ifstream &, int);
+      static BTreeNode* split (BTreeNode*&, int*, int*);
 
 };
 

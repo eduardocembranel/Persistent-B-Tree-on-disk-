@@ -21,6 +21,7 @@ class CabecalhoDados
       int getPosLivre ();
       void setPosCabeca (int);
       void setPosLivre (int);
+      void setCabeca (int);
       void incTopo ();
 };
 

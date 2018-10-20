@@ -2,9 +2,10 @@
 
 CabecalhoIndice::CabecalhoIndice ()
 {
-   this->posRaiz  = -1;
-   this->posTopo  =  0;
-   this->posLivre = -1; 
+   this->posRaiz   = -1;
+   this->posTopo   =  0;
+   this->posLivre  = -1; 
+   this->posCabeca = -1;
 }
 
 void CabecalhoIndice::setCabecalho (std::ofstream &file)
@@ -42,4 +43,14 @@ int CabecalhoIndice::getPosLivre ()
 int CabecalhoIndice::getPosTopo ()
 {
    return this->posTopo;
+}
+
+int CabecalhoIndice::getPosCabeca ()
+{
+   return this->posCabeca;
+}
+
+void CabecalhoIndice::setPosCabeca (int pos)
+{
+   this->posCabeca = pos;
 }

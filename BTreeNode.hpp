@@ -13,12 +13,15 @@ class BTreeNode
       int filhos[ORDEM + 1];
       int indices[ORDEM];
       int prox;
+      int ant;
 
    public:
       BTreeNode (int, int);
       BTreeNode ();
       void setProx (int);
+      void setAnt (int);
       int getProx ();
+      int getAnt ();
       bool overflow ();
       bool isLeaf ();
       void setNode (std::ofstream &, int);

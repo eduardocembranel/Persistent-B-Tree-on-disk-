@@ -35,6 +35,7 @@ void App::run ()
             this->buscaMedico();
             break;
          case REMOVE_MEDICO:
+            this->removeMedico();
             break;
          case IMPRIME_CADASTRO:
             this->imprimirCadastro();
@@ -101,9 +102,27 @@ void App::buscaMedico ()
    }
    else
    {
-      NoMedico dado = this->arq->getData (indice);
+      NoMedico dado = this->arq->getData(indice);
       std::cout << dado.medico;
    }
+   Util::pressRetornar();
+}
+
+void App::removeMedico ()
+{
+   Util::clear();
+   std::cout << "[Remover medico]\n\nInsira o id: ";
+   int id;
+   std::cin  >> id;
+   Util::flushInput();
+   int indice = this->arq2->remove(id);
+   if (indice == -1)
+   {
+      std::cout << "\nMedico nao encontrado (Id invalido)!\n";
+   }
+   else
+      this->arq->remove(indice);
+
    Util::pressRetornar();
 }
 
@@ -235,7 +254,7 @@ bool App::ehValida (std::vector<std::string> vet)
    if (Util::ehNula(vet[1]) || Util::ehNula(vet[2]) ||
        Util::ehNula(vet[3]) || Util::ehNula(vet[6]))
       return false;
-;
+
    return true;
 }
 

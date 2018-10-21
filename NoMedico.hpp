@@ -8,12 +8,16 @@ class NoMedico
    public: //mudar para privado dps
       Medico medico;
       int prox;
+      int ant;
 
    public:
       NoMedico ();
       void setMedico (Medico);
       void setProx (int);
+      void setAnt (int);
       int getProx ();
+      int getAnt ();
+
 };
 
 #endif // !NOMEDICO_HPP

@@ -5,4 +5,3 @@
 2500:Joana Santana:F:777777777-66:2468:pediatra:675433-1:45-2102-5000:45-99985-6644::Rua Almirante Barroso 55:17/12/1997
 4728:Joaquim Souza:M:111222333-22:8642::34433-6:45-3573-3546:45-98831-4455:jsouza@hotmail.com::05/03/1992
 1324:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
-500:Sandra Cardoso:F:777888999-88:4523::8765435-7:::sandrac@yahoo.com:Rua Santos Dumont 735:8/11/1994

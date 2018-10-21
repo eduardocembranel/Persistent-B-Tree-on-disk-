@@ -17,6 +17,16 @@ void NoMedico::setProx (int prox)
    this->prox = prox;
 }
 
+void NoMedico::setAnt (int ant)
+{
+   this->ant = ant;
+}
+
+int NoMedico::getAnt ()
+{
+   return this->ant;
+}
+
 int NoMedico::getProx ()
 {
    return this->prox;

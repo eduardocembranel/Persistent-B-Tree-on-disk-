@@ -18,6 +18,7 @@ class ArquivoIndice : public Arquivo
       ArquivoIndice (const std::string &);
 
       void insere (int, int);
+      int remove (int);
       void mostrarPorNivel ();
       int altura ();
       int getIndice (int); //dada uma chave
@@ -25,6 +26,16 @@ class ArquivoIndice : public Arquivo
       ~ArquivoIndice ();
 
    private:
+      int removeAux (int, int);
+      void removeDaFolha (int, int);
+      void removeNaoFolha (int, int);
+      void getSuc (int, int &, int &);
+      void getAnt (int, int &, int &);
+      void preenche (int, int);
+      void emprestaEsquerda (int, int);
+      void emprestaDireita (int, int);
+      void merge (int, int);
+      void removeLista (int);
       bool insereAux (int, int, int);
       void insereRaiz (BTreeNode*);
       int insereNaoRaiz (BTreeNode*);

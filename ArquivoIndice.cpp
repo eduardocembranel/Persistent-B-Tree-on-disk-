@@ -97,6 +97,19 @@ bool ArquivoIndice::insereAux (int pos, int chave, int indice)
 void ArquivoIndice::insereRaiz (BTreeNode *node)
 {
    node->setProx(this->cab->getPosCabeca());
+   node->setAnt(-1);
+
+   //faz a cabeca antiga apontar para o anterior (nova cabeca)
+   if (this->cab->getPosCabeca() != -1)
+   {
+      BTreeNode *prox = BTreeNode::getNode(this->in, this->cab->getPosCabeca());
+      if (this->cab->getPosLivre() == -1)
+         prox->setAnt(this->cab->getPosTopo());
+      else
+         prox->setAnt(this->cab->getPosLivre());
+      prox->setNode(this->out, this->cab->getPosTopo());
+   }
+
    if (this->cab->getPosLivre() == -1)
    {
       node->setNode(this->out, this->cab->getPosTopo());
@@ -119,6 +132,19 @@ int ArquivoIndice::insereNaoRaiz (BTreeNode *node)
 {
    int pos;
    node->setProx(this->cab->getPosCabeca());
+   node->setAnt(-1);
+
+   //faz a cabeca antiga apontar para o anterior (nova cabeca)
+   if (this->cab->getPosCabeca() != -1)
+   {
+      BTreeNode *prox = BTreeNode::getNode(this->in, this->cab->getPosCabeca());
+      if (this->cab->getPosLivre() == -1)
+         prox->setAnt(this->cab->getPosTopo());
+      else
+         prox->setAnt(this->cab->getPosLivre());
+      prox->setNode(this->out, this->cab->getPosTopo());
+   }
+   
    if (this->cab->getPosLivre() == -1)
    {
       pos = this->cab->getPosTopo();
@@ -134,6 +160,275 @@ int ArquivoIndice::insereNaoRaiz (BTreeNode *node)
    this->cab->setPosLivre(aux->getProx());
    delete aux;
    return pos;
+}
+
+int ArquivoIndice::remove (int chave)
+{
+   if (this->cab->getPosRaiz() == -1)
+      return -1;
+   
+   int pos = this->removeAux(this->cab->getPosRaiz(), chave);
+
+   BTreeNode *raiz = BTreeNode::getNode(this->in, this->cab->getPosRaiz());
+   if (raiz->numChaves == 0)
+   {
+      int posRaiz = this->cab->getPosRaiz();
+      //entao a arvore esta vazia
+      if (raiz->isLeaf())
+         this->cab->setPosRaiz(-1);
+      else
+         this->cab->setPosRaiz(raiz->filhos[0]);
+      this->removeLista(posRaiz);
+   }
+   this->cab->setCabecalho(this->out);
+   return pos;
+}
+
+int ArquivoIndice::removeAux (int pos, int chave)
+{
+   BTreeNode *atual = BTreeNode::getNode(this->in, pos);   
+   
+   int i = 0;
+   while (i < atual->numChaves && atual->chaves[i] < chave) 
+      ++i;
+
+   //chave encontrada
+   if (i < atual->numChaves && atual->chaves[i] == chave) 
+   { 
+      if (atual->isLeaf())
+         this->removeDaFolha(pos, i);
+      else
+         this->removeNaoFolha(pos, i);
+
+      
+      return atual->indices[i];
+   }
+
+   //chave nao encontrada
+   if (atual->isLeaf())
+      return -1;
+
+   bool flag = (i == atual->numChaves) ? true : false;
+
+   BTreeNode *filho = BTreeNode::getNode(this->in, atual->filhos[i]);
+   
+   if (filho->numChaves < 3)
+      preenche(pos, i);
+
+   if (flag && i > atual->numChaves)
+      return this->removeAux(atual->filhos[i - 1], chave);
+   else
+      return this->removeAux(atual->filhos[i], chave);
+   
+}
+
+void ArquivoIndice::removeDaFolha (int pos, int posChave)
+{
+   BTreeNode *atual = BTreeNode::getNode(this->in, pos);
+   
+   for (int i = posChave + 1; i < atual->numChaves; ++i) 
+   {
+      atual->chaves[i - 1]  = atual->chaves[i]; 
+      atual->indices[i - 1] = atual->indices[i];
+   }
+   --atual->numChaves;
+   atual->setNode(this->out, pos);
+}
+
+void ArquivoIndice::removeNaoFolha (int pos, int posChave)
+{
+   BTreeNode *atual = BTreeNode::getNode(this->in, pos);
+   int chave = atual->chaves[posChave];
+
+   BTreeNode *esq = BTreeNode::getNode(this->in, atual->filhos[posChave]);
+
+   int chaveAnt, indiceAnt;
+   this->getAnt(atual->filhos[posChave], chaveAnt, indiceAnt);
+   atual->chaves[posChave]  = chaveAnt;
+   atual->indices[posChave] = indiceAnt;
+   this->removeAux(atual->filhos[posChave], chaveAnt);
+   atual->setNode(this->out, pos);
+}
+
+void ArquivoIndice::preenche (int pos, int posChave)
+{
+   BTreeNode *atual = BTreeNode::getNode(this->in, pos);
+   BTreeNode *esq   = BTreeNode::getNode(this->in, atual->filhos[posChave - 1]);
+   BTreeNode *dir   = BTreeNode::getNode(this->in, atual->filhos[posChave + 1]);
+
+   cout << "teste: " << esq->numChaves << dir->numChaves << "\n";
+
+   cout << "pos chave: " << posChave << " esq: " << esq->numChaves << " dir:" << dir->numChaves << "\n";
+   if (posChave != 0 && esq->numChaves > 2)
+      this->emprestaEsquerda(pos, posChave);
+   else if (posChave != atual->numChaves && dir->numChaves > 2)
+      this->emprestaDireita(pos, posChave);
+   else
+   {
+      if (posChave != atual->numChaves)
+         this->merge(pos, posChave);
+      else
+         this->merge(pos, posChave - 1);
+   }
+}
+
+void  ArquivoIndice::emprestaEsquerda (int pos, int posChave)
+{
+   BTreeNode *atual = BTreeNode::getNode(this->in, pos);
+   BTreeNode *filho = BTreeNode::getNode(this->in, atual->filhos[posChave]);
+   BTreeNode *irmao = BTreeNode::getNode(this->in, atual->filhos[posChave - 1]);
+
+   for (int i = filho->numChaves - 1; i >= 0; --i)
+   {
+      filho->chaves[i + 1]  = filho->chaves[i];
+      filho->indices[i + 1] = filho->indices[i];
+   } 
+   if (!filho->isLeaf())
+      for (int i = filho->numChaves; i >= 0; --i)
+         filho->filhos[i + 1] = filho->filhos[i];
+
+   filho->chaves[0]  = atual->chaves[posChave - 1];
+   filho->indices[0] = atual->indices[posChave - 1];
+
+   if (!filho->isLeaf())
+      filho->filhos[0] = irmao->filhos[irmao->numChaves];
+
+   atual->chaves[posChave - 1]  = irmao->chaves[irmao->numChaves -1];
+   atual->indices[posChave - 1] = irmao->indices[irmao->numChaves -1];
+   ++filho->numChaves;
+   --irmao->numChaves;
+
+   atual->setNode(this->out, pos);
+   filho->setNode(this->out, atual->filhos[posChave]);
+   irmao->setNode(this->out, atual->filhos[posChave - 1]);   
+}
+
+void ArquivoIndice::emprestaDireita (int pos, int posChave)
+{
+   BTreeNode *atual = BTreeNode::getNode(this->in, pos);
+   BTreeNode *filho = BTreeNode::getNode(this->in, atual->filhos[posChave]);
+   BTreeNode *irmao = BTreeNode::getNode(this->in, atual->filhos[posChave + 1]);
+
+   filho->chaves[filho->numChaves] = atual->chaves[posChave];
+   filho->indices[filho->numChaves] = atual->indices[posChave];
+
+   if (!irmao->isLeaf())
+      filho->filhos[filho->numChaves + 1] = irmao->filhos[0];
+
+   atual->chaves[posChave]  = irmao->chaves[0];
+   atual->indices[posChave] = irmao->indices[0];
+
+   for (int i = 1; i < irmao->numChaves; ++i)
+   {
+      irmao->chaves[i - 1]  = irmao->chaves[i];
+      irmao->indices[i - 1] = irmao->indices[i];
+   }
+   
+   if (!irmao->isLeaf())
+      for (int i = 1; i <= irmao->numChaves; ++i)
+         irmao->filhos[i - 1] = irmao->filhos[i];
+
+   ++filho->numChaves;
+   --irmao->numChaves;
+   
+   atual->setNode(this->out, pos);
+   filho->setNode(this->out, atual->filhos[posChave]);
+   irmao->setNode(this->out, atual->filhos[posChave + 1]);
+}
+
+void ArquivoIndice::merge (int pos, int posChave)
+{
+   BTreeNode *atual = BTreeNode::getNode(this->in, pos);
+   BTreeNode *filho = BTreeNode::getNode(this->in, atual->filhos[posChave]);
+   BTreeNode *irmao = BTreeNode::getNode(this->in, atual->filhos[posChave + 1]);
+
+   //2 = minimo de chaves
+   filho->chaves[2]  = atual->chaves[posChave];
+   filho->indices[2] = atual->indices[posChave];
+
+   for (int i = 0; i < irmao->numChaves; ++i)
+   {
+      filho->chaves[i + 2]  = irmao->chaves[i];
+      filho->indices[i + 2] = irmao->indices[i];
+   }
+   if (!filho->isLeaf())
+      for (int i = 0; i <= irmao->numChaves; ++i)
+         filho->filhos[i + 2] = irmao->filhos[i];
+   
+   for (int i = posChave + 1; i < atual->numChaves; ++i)
+   {
+      atual->chaves[i - 1]  = atual->chaves[i];
+      atual->indices[i - 1] = atual->indices[i];
+   }
+   for (int i = posChave + 2; i <= atual->numChaves; ++i)
+      atual->filhos[i - 1] = atual->filhos[i];
+
+   filho->numChaves += irmao->numChaves + 1;
+   --atual->numChaves;
+
+   atual->setNode(this->out, pos);
+   filho->setNode(this->out, atual->filhos[posChave]);
+}
+
+void ArquivoIndice::getSuc (int pos, int &chaveSuc, int &indiceSuc) 
+{ 
+   BTreeNode *atual = BTreeNode::getNode(this->in, pos);
+   while (!atual->isLeaf())
+      atual = BTreeNode::getNode(this->in, atual->filhos[0]);
+
+   chaveSuc  = atual->chaves[0];
+   indiceSuc = atual->indices[0]; 
+}
+
+void ArquivoIndice::getAnt (int pos, int &chaveAnt, int &indiceAnt) 
+{ 
+   BTreeNode *atual = BTreeNode::getNode(this->in, pos);
+   while (!atual->isLeaf())
+      atual = BTreeNode::getNode(this->in, atual->filhos[atual->numChaves]);
+
+   chaveAnt  = atual->chaves[atual->numChaves - 1];
+   indiceAnt = atual->indices[atual->numChaves - 1]; 
+} 
+
+void ArquivoIndice::removeLista (int pos)
+{
+   BTreeNode *atual = BTreeNode::getNode(this->in, pos);
+
+   //remocao na cabeca
+   if (pos == this->cab->getPosCabeca())
+   {
+      this->cab->setPosCabeca(atual->getProx());
+      if (atual->getProx() != -1)
+      {
+         BTreeNode *prox = BTreeNode::getNode(this->in, atual->getProx());
+         prox->setAnt(-1);  
+         prox->setNode(this->out, atual->getProx());
+      }
+   }
+   //remocao no meio
+   else
+   {
+      //proximo do anterior -> proximo
+      BTreeNode *ant = BTreeNode::getNode(this->in, atual->getAnt());
+      ant->setProx(atual->getProx());
+      ant->setNode(this->out, atual->getAnt());
+
+      //nao eh a calda
+      if (atual->getProx() != -1)
+      {
+         //anterior do proximo -> anterior.
+         BTreeNode *prox = BTreeNode::getNode(this->in, atual->getProx());
+         prox->setAnt(atual->getAnt());
+         prox->setNode(this->out, atual->getProx());
+      }
+   }
+   //Encadeando o No removido na lista de livres
+   atual->setProx(this->cab->getPosLivre());
+   atual->setAnt(-1);
+   atual->setNode(this->out, pos);
+
+   this->cab->setPosLivre(pos);
+   this->cab->setCabecalho(this->out);
 }
 
 int ArquivoIndice::altura ()

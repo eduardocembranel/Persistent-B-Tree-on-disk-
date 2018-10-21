@@ -19,6 +19,7 @@ class App
       void insereDado ();
       void buscaMedico ();
       void alteraMedico ();
+      void removeMedico ();
       void mostraMenu ();
       void carregaArquivo ();
       bool ehValida (std::vector<std::string>);

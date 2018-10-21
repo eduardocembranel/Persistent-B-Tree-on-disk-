@@ -27,6 +27,16 @@ int BTreeNode::getProx ()
    return this->prox;
 }
 
+int BTreeNode::getAnt ()
+{
+   return this->ant;
+}
+
+void BTreeNode::setAnt (int ant)
+{
+   this->ant = ant;
+}
+
 bool BTreeNode::overflow ()
 {
    return (this->numChaves == ORDEM);

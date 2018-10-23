@@ -5,12 +5,11 @@
 
 class NoMedico
 {
-   public: //mudar para privado dps
+   public:
       Medico medico;
       int prox;
       int ant;
 
-   public:
       NoMedico ();
       void setMedico (Medico);
       void setProx (int);

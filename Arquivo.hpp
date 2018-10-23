@@ -1,25 +1,20 @@
 #ifndef ARQUIVO_HPP
 #define ARQUIVO_HPP
 
-#include <cstdio>
 #include <string>
 #include <fstream>
+
 #include "NoMedico.hpp"
 
 class Arquivo
 {
-   public: //mudar para protected dps
+   protected:
       std::string fileName;
       std::ifstream in;
       std::ofstream out;
 
       Arquivo (const std::string&);
-      ~Arquivo ();
-   
-   public:
-     // virtual void insere (Medico);
-     // virtual NoMedico* getData (int);
-      
+      ~Arquivo ();   
 };
 
 #endif // !ARQUIVO_HPP

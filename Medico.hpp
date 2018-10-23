@@ -1,26 +1,26 @@
 #ifndef MEDICO_HPP
 #define MEDICO_HPP
 
-#include <string>
 #include <iostream>
+
+#define STR_SIZE 100
 
 class Medico
 {
-   public: //mudar para privado dps
+   public:
       int id;
       int crm;
-      char nome[100];
-      char sexo[100];
-      char cpf[100];
-      char especialidade[100];
-      char rg[100];
-      char telefone[100];
-      char celular[100];
-      char email[100];
-      char endereco[100];
-      char nascimento[100];      
+      char nome[STR_SIZE];
+      char sexo[STR_SIZE];
+      char cpf[STR_SIZE];
+      char especialidade[STR_SIZE];
+      char rg[STR_SIZE];
+      char telefone[STR_SIZE];
+      char celular[STR_SIZE];
+      char email[STR_SIZE];
+      char endereco[STR_SIZE];
+      char nascimento[STR_SIZE];
 
-   public:
       void setMedico ();
       friend std::ostream& operator<< (std::ostream&, const Medico&);
 

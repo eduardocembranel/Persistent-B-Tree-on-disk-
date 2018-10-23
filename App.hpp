@@ -1,6 +1,8 @@
 #ifndef APP_HPP
 #define APP_HPP
 
+#include <string>
+
 #include "ArquivoDados.hpp"
 #include "ArquivoIndice.hpp"
 #include "Medico.hpp"
@@ -15,6 +17,7 @@ class App
    private:
       ArquivoDados  *arq;
       ArquivoIndice *arq2;
+      
       void imprimirCadastro ();
       void insereDado ();
       void buscaMedico ();
@@ -23,7 +26,6 @@ class App
       void mostraMenu ();
       void carregaArquivo ();
       bool ehValida (std::vector<std::string>);
-
       enum MenuEstado
       {
          CARREGA_ARQUIVO = 1,

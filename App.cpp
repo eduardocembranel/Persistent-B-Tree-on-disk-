@@ -61,10 +61,63 @@ void App::insereDado ()
 
    Medico elem;
    elem.setMedico();
-   int pos = arq->insere(elem);
-   arq2->insere(elem.id, pos);
-
-   std::cout << "\n";
+   
+   bool erro = false;
+   if (Util::ehNula(elem.nome))
+   {
+      std::cout << "\nNome invalido!\n";
+      erro = true;
+   }
+   if (elem.id <= 0)
+   {
+      std::cout << "\nId invalida!\n";
+      erro = true;
+   }
+   if (!Util::ehFormatoData(elem.nascimento))
+   { 
+      std::cout << "\nData de nascimento invalida!\n";
+      erro = true;
+   }
+   if (Util::ehNula(elem.sexo))
+   {
+      std::cout << "\nSexo invalido!\n";
+      erro = true;
+   }
+   if (Util::ehNula(elem.cpf) || !Util::ehNumTraco(elem.cpf))
+   {
+      std::cout << "\nCpf invalido!\n";
+      erro = true;
+   }
+   if (elem.crm <= 0)
+   {
+      std::cout << "\nCrm invalida!\n";
+      erro = true;
+   }
+   if (Util::ehNula(elem.rg))
+   {
+      std::cout << "\nRg invalido!\n";
+      erro = true;
+   }
+   if (!Util::ehNula(elem.celular) && !Util::ehNumTraco(elem.telefone))
+   {
+      std::cout << "\nTelefone invalido!\n";
+      erro = true;
+   }
+   if (!Util::ehNula(elem.celular) && !Util::ehNumTraco(elem.celular))
+   { 
+      std::cout << "\nCelular invalido!\n";
+      erro = true;
+   }
+   if (erro == false)
+   {
+      int pos = arq->insere(elem);
+      arq2->insere(elem.id, pos);
+      std::cout << "\nMedico inserido com sucesso!\n";
+   }
+   else
+   {
+      std::cout << "\nNao foi possivel inserir os dados!\n";
+   }
    Util::pressRetornar();
 }
 
@@ -121,8 +174,10 @@ void App::removeMedico ()
       std::cout << "\nMedico nao encontrado (Id invalido)!\n";
    }
    else
+   {
       this->arq->remove(indice);
-
+      std::cout << "\nMedico removido com sucesso!\n";
+   }
    Util::pressRetornar();
 }
 
@@ -168,28 +223,48 @@ void App::alteraMedico ()
       int escolha;
       std::cin >> escolha;
       Util::flushInput();
+      bool erro = false;
       if (escolha >= TELEFONE && escolha <= ENDERECO)
       {
          switch (escolha)
          {
             case TELEFONE:
                std::cout << "\nNovo telefone: ";
-               std::cin  >> dado.medico.telefone; /////////mudar usando setters da classe medico
+               std::cin.getline(dado.medico.telefone, sizeof(dado.medico.telefone));
+               if (!Util::ehNula(dado.medico.telefone) 
+                  && !Util::ehNumTraco(dado.medico.telefone))
+               { 
+                  std::cout << "\nTelefone invalido!\n";
+                  erro = true;
+               }
                break;
             case CELULAR:
                std::cout << "\nNovo celular: ";
-               std::cin  >> dado.medico.celular;
+               std::cin.getline(dado.medico.celular, sizeof(dado.medico.celular));
+               if (!Util::ehNula(dado.medico.celular) &&
+                  !Util::ehNumTraco(dado.medico.celular))
+               { 
+                  std::cout << "\nCelular invalido!\n";
+                  erro = true;
+               }
                break;
             case EMAIL:
-               std::cout << "\nNovo telefone: ";
-               std::cin  >> dado.medico.email;
+               std::cout << "\nNovo email: ";
+               std::cin.getline(dado.medico.email, sizeof(dado.medico.email));
                break;
             case ENDERECO:
-               std::cout << "\nNovo telefone: ";
-               std::cin  >> dado.medico.telefone;
+               std::cout << "\nNovo endereco: ";
+               std::cin.getline(dado.medico.endereco, sizeof(dado.medico.endereco));
                break;
          }
-         this->arq->insereNo(&dado, indice); 
+         if (erro == false)
+         {
+            this->arq->insereNo(&dado, indice); 
+            std::cout << "\nDado alterado com sucesso!\n";
+         }
+         else
+            std::cout << "\nNao foi possivel alterar o dado!\n";
+         
       }
       else if (escolha != VOLTAR)
       {
@@ -214,12 +289,13 @@ void App::carregaArquivo ()
    }
    else
    {
-      std::string linha;
+      std::string linha; bool carregou = false;
       while (std::getline(fBuffer, linha))
       {
          std::vector<std::string> info = Util::splitString(linha, ':');
          if (this->ehValida(info))
          {
+            carregou = true;
             Medico elem;
             elem.id                  = Util::strToInt(info[0]);
             elem.crm                 = Util::strToInt(info[4]);
@@ -237,7 +313,11 @@ void App::carregaArquivo ()
             int pos = arq->insere(elem);
             arq2->insere(elem.id, pos);
          }
-      }      
+      }
+      if (carregou == true)
+         std::cout << "\nArquivo carregado com sucesso!\n";
+      else
+         std::cout << "\nArquivo encontrado, mas falhou em carregar dados!\n";
    }
    fBuffer.close();
    Util::pressRetornar();

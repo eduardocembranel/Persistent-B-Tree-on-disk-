@@ -2,10 +2,7 @@
 #include "CabecalhoDados.hpp"
 #include <iostream>
 
-NoMedico::NoMedico ()
-{
-
-}
+NoMedico::NoMedico () {}
 
 void NoMedico::setMedico (Medico other)
 {

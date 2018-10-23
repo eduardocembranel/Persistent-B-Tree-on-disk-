@@ -1,8 +1,6 @@
-#include "ArquivoDados.hpp"
-#include <cstdio>
 #include <fstream>
-#include <iostream>
-using namespace std;
+
+#include "ArquivoDados.hpp"
 
 ArquivoDados::ArquivoDados (const std::string &fileName) : Arquivo(fileName)
 {  
@@ -29,7 +27,7 @@ int ArquivoDados::insere (Medico medico)
       this->insereNo(&prox, this->cab->getPosCabeca());
    }
    
-   if (this->cab->getPosLivre() == -1) //n ha nós livres
+   if (this->cab->getPosLivre() == -1) //n ha Nos livres
    {
       this->insereNo(&x, this->cab->getPosTopo());
       indice = this->cab->getPosTopo();

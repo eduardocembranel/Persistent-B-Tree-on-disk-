@@ -1,4 +1,5 @@
 #include "Medico.hpp"
+#include "Util.hpp"
 
 std::ostream& operator<< (std::ostream &out, const Medico &medico)
 {
@@ -14,34 +15,36 @@ std::ostream& operator<< (std::ostream &out, const Medico &medico)
        << "Telefone:      " << medico.telefone      << "\n"
        << "Celular:       " << medico.celular       << "\n"
        << "E-mail:        " << medico.email         << "\n"
-       << "Endereco:      " << medico.endereco      << "\n";   
+       << "Endereco:      " << medico.endereco      << "\n";
    return out;
 }
 
 void Medico::setMedico ()
 {
    std::cout << "Nome: ";
-   std::cin  >> this->nome;
+   std::cin.getline(this->nome, sizeof(this->nascimento));
    std::cout << "Id: ";
    std::cin  >> this->id;
+   Util::flushInput();
    std::cout << "Nacimento: ";
-   std::cin  >> this->nascimento;
+   std::cin.getline(this->nascimento, sizeof(this->nascimento));
    std::cout << "Sexo: ";
-   std::cin  >> this->sexo;
+   std::cin.getline(this->sexo, sizeof(this->sexo));
    std::cout << "CPF: ";
-   std::cin  >> this->cpf;
+   std::cin.getline(this->cpf, sizeof(this->cpf));
    std::cout << "CRM: ";
    std::cin  >> this->crm;
+   Util::flushInput();
    std::cout << "RG: ";
-   std::cin  >> this->rg;
+   std::cin.getline(this->rg, sizeof(this->rg));
    std::cout << "Especialidade: ";
-   std::cin  >> this->especialidade;
+   std::cin.getline(this->especialidade, sizeof(this->especialidade));
    std::cout << "Telefone: ";
-   std::cin  >> this->telefone;
+   std::cin.getline(this->telefone, sizeof(this->telefone));
    std::cout << "Celular: ";
-   std::cin  >> this->celular;
+   std::cin.getline(this->celular, sizeof(this->celular));
    std::cout << "E-mail: ";
-   std::cin  >> this->email;
+   std::cin.getline(this->email, sizeof(this->email));
    std::cout << "Endereco: ";
-   std::cin  >> this->endereco; 
+   std::cin.getline(this->endereco, sizeof(this->endereco));
 }

@@ -9,14 +9,6 @@ CabecalhoDados::CabecalhoDados ()
    this->posLivre  = -1;
 }
 
-CabecalhoDados* CabecalhoDados::getCabecalho (std::ifstream &file)
-{
-   CabecalhoDados *cab;
-   file.seekg(0);
-   file.read((char*)cab, sizeof(CabecalhoDados));
-   return cab;
-}
-
 void CabecalhoDados::setCabecalho (std::ofstream &file)
 {
    file.seekp(0);

@@ -4,4 +4,29 @@
 3000:Joao Machado:M:888888888-33:9753:otorrinolaringologista:M343216:45-3572-8866:45-99987-4422::Av Parana 1122:11/08/1985
 2500:Joana Santana:F:777777777-66:2468:pediatra:675433-1:45-2102-5000:45-99985-6644::Rua Almirante Barroso 55:17/12/1997
 4728:Joaquim Souza:M:111222333-22:8642::34433-6:45-3573-3546:45-98831-4455:jsouza@hotmail.com::05/03/1992
-1324:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+1:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+2:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+3:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+4:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+
+5:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+6:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+7:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+8:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+9:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+10:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+11:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+12:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+13:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+14:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+15:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+16:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+17:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+18:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+19:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+20:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+21:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+22:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+23:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+24:Pedro Pinheiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987
+heiro:M:444555666-11:8967:hematologista:M234525::45-99927-7766:pedrop@gmail.br:Av Republica Argentina 66:14/07/1987

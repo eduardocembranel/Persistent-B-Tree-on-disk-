@@ -1,21 +1,22 @@
 #ifndef BTREENODE_HPP
 #define BTREENODE_HPP
 
-#define ORDEM 5
-
 #include <fstream>
 
 class BTreeNode
 {
-   public: //mudar para privado dps
-      int numChaves;
+   friend class ArquivoIndice;
+   
+   private:
+      static const int ORDEM  = 5;
+      static const int MINIMO = 2;
+      int numChaves = 4;
       int chaves[ORDEM];
       int filhos[ORDEM + 1];
       int indices[ORDEM];
       int prox;
       int ant;
 
-   public:
       BTreeNode (int, int);
       BTreeNode ();
       void setProx (int);
@@ -23,10 +24,11 @@ class BTreeNode
       int getProx ();
       int getAnt ();
       bool overflow ();
+      bool underflow ();
       bool isLeaf ();
       void setNode (std::ofstream &, int);
-      static BTreeNode* getNode (std::ifstream &, int);
-      static BTreeNode* split (BTreeNode*&, int*, int*);
+      static BTreeNode getNode (std::ifstream &, int);
+      static BTreeNode split (BTreeNode &, int *, int *);
 
 };
 

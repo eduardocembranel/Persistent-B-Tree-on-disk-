@@ -1,35 +1,34 @@
-#include <cstdlib>
 #include <iostream>
 #include <sstream>
 #include <limits>
+#include <cstring>
+#include <cstdlib>
 #include <cctype>
 
 #include "Util.hpp"
-
-using namespace std;
 
 Util::Util () {}
 
 std::vector<std::string> Util::splitString (std::string s, char c)
 {
-    int len = s.length();
-    vector<string> subArray;
+   int tam = s.length();
+   std::vector<std::string> separado;
 
-    for (int j = 0, k = 0; j < len; ++j) 
-    {
-        if (s[j] == c) 
-        {
-            string ch = s.substr(k, j - k);
-            k = j+1;
-            subArray.push_back(ch);
-        }
-        if (j == len - 1) 
-        {
-            string ch = s.substr(k, j - k + 1);
-            subArray.push_back(ch);
-        }
-    }
-    return subArray;
+   for (int j = 0, k = 0; j < tam; ++j) 
+   {
+      if (s[j] == c) 
+      {
+         std::string ch = s.substr(k, j - k);
+         k = j + 1;
+         separado.push_back(ch);
+      }
+      if (j == tam - 1) 
+      {
+         std::string ch = s.substr(k, j - k + 1);
+         separado.push_back(ch);
+      }
+   }
+   return separado;
 }
 
 void Util::clear ()
@@ -52,11 +51,11 @@ void Util::flushInput ()
 int Util::strToInt (const std::string &str)
 {
    int elem;
-   istringstream (str) >> elem;
+   std::istringstream (str) >> elem;
    return elem;
 }
 
-bool Util::ehNula(const std::string &str)
+bool Util::ehNula (const std::string &str)
 {
    return str.size() == 0;
 }
@@ -80,7 +79,7 @@ bool Util::ehFormatoData (const std::string &str)
 bool Util::ehNumTraco (const std::string &str)
 {
    for (char it : str)
-      if (it != '/' && !isdigit(it))
+      if (it != '-' && !isdigit(it))
          return false;
    return true;
 }

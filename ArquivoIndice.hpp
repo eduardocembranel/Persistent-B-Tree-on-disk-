@@ -1,11 +1,11 @@
 #ifndef ARQUIVOINDICE_HPP
 #define ARQUIVOINDICE_HPP
 
+#include <vector>
+
 #include "Arquivo.hpp"
 #include "CabecalhoIndice.hpp"
 #include "BTreeNode.hpp"
-
-#include <vector>
 
 //insere chave + indice
 //arquivo contem BTreeNode
@@ -31,14 +31,14 @@ class ArquivoIndice : public Arquivo
       void removeNaoFolha (int, int);
       void getSuc (int, int &, int &);
       void getAnt (int, int &, int &);
-      void preenche (int, int);
       void emprestaEsquerda (int, int);
       void emprestaDireita (int, int);
-      void merge (int, int);
+      void mergeDireita (int, int);
+      void mergeEsquerda (int, int);
       void removeLista (int);
       bool insereAux (int, int, int);
-      void insereRaiz (BTreeNode*);
-      int insereNaoRaiz (BTreeNode*);
+      void insereRaiz (BTreeNode);
+      int insereNaoRaiz (BTreeNode);
       int alturaAux (int);
       void mostraNivel (int, int);
       void getIndicesAux (int, std::vector<int> &);

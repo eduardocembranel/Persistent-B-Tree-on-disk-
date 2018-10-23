@@ -14,7 +14,6 @@ class CabecalhoDados
 
    public:
       CabecalhoDados ();
-      CabecalhoDados* getCabecalho (std::ifstream&);
       void setCabecalho (std::ofstream&);
       int getPosCabeca ();
       int getPosTopo ();

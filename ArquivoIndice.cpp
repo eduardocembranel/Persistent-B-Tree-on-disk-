@@ -3,12 +3,21 @@
 #include "ArquivoIndice.hpp"
 #include "Util.hpp"
 
+/* brief: construtor da classe, incializa o arquivo de indice
+* param: nome do arquivo de indice
+* pre: nome de arquivo valido
+* pos: arquivo inicializado com cabecalho
+*/
 ArquivoIndice::ArquivoIndice (const std::string &fileName) : Arquivo(fileName)
 {  
    this->cab = new CabecalhoIndice();
    this->cab->setCabecalho(this->out); //coloca o cabecalho no arquivo
 }
 
+/* brief: insere uma chave e indice na arvore b do arquivo de indices
+* pre: chave deve ser um inteiro positivo diferente de zero
+* pos: chave e indice inseridos
+*/
 void ArquivoIndice::insere (int chave, int indice)
 {
    //arvore vazia
@@ -35,6 +44,12 @@ void ArquivoIndice::insere (int chave, int indice)
    this->cab->setCabecalho(this->out);
 }
 
+/* brief: funcao auxiliar para o metodo de inserir chave no arquivo de indices
+* param: posicao do No atual, chave e indice a serem inseridos
+* return: verdadeiro caso ocorreu overflow e falso caso ocorreu underflow
+* pre: chave deve ser um inteiro positivo diferente de zero
+* pos: chave e indice inseridos
+*/
 bool ArquivoIndice::insereAux (int pos, int chave, int indice)
 {  
    BTreeNode atual = BTreeNode::getNode(this->in, pos);
@@ -92,27 +107,17 @@ bool ArquivoIndice::insereAux (int pos, int chave, int indice)
    return atual.overflow();
 }
 
+/* brief: insere um No, sendo este a raiz, na lista de Nos do arquivo de indices
+* param: No a ser inserido
+* pre: No deve ser a raiz
+* pos: No inserido no arquivo
+*/
 void ArquivoIndice::insereRaiz (BTreeNode node)
 {
-   node.setProx(this->cab->getPosCabeca());
-   node.setAnt(-1);
-
-   //faz a cabeca antiga apontar para o anterior (nova cabeca)
-   if (this->cab->getPosCabeca() != -1)
-   {
-      BTreeNode prox = BTreeNode::getNode(this->in, this->cab->getPosCabeca());
-      if (this->cab->getPosLivre() == -1)
-         prox.setAnt(this->cab->getPosTopo());
-      else
-         prox.setAnt(this->cab->getPosLivre());
-      prox.setNode(this->out, this->cab->getPosCabeca());
-   }
-
    if (this->cab->getPosLivre() == -1)
    {
       node.setNode(this->out, this->cab->getPosTopo());
       this->cab->setPosRaiz(this->cab->getPosTopo());
-      this->cab->setPosCabeca(this->cab->getPosTopo());
       this->cab->incTopo();
    }
    else
@@ -120,44 +125,41 @@ void ArquivoIndice::insereRaiz (BTreeNode node)
       BTreeNode aux = BTreeNode::getNode(this->in, this->cab->getPosLivre());
       node.setNode(this->out, this->cab->getPosLivre());
       this->cab->setPosRaiz(this->cab->getPosLivre());
-      this->cab->setPosCabeca(this->cab->getPosLivre());
       this->cab->setPosLivre(aux.getProx());
    }
 }
 
+/* brief: insere um No na lista de Nos do arquivo de indices
+* param: No a ser inserido
+* return: posicao em que o No foi inserido no arquivo
+* pre: No valido
+* pos: No inserido
+*/
 int ArquivoIndice::insereNaoRaiz (BTreeNode node)
 {
    int pos;
-   node.setProx(this->cab->getPosCabeca());
-   node.setAnt(-1);
-
-   //faz a cabeca antiga apontar para o anterior (nova cabeca)
-   if (this->cab->getPosCabeca() != -1)
-   {
-      BTreeNode prox = BTreeNode::getNode(this->in, this->cab->getPosCabeca());
-      if (this->cab->getPosLivre() == -1)
-         prox.setAnt(this->cab->getPosTopo());
-      else
-         prox.setAnt(this->cab->getPosLivre());
-      prox.setNode(this->out, this->cab->getPosCabeca());
-   }
    
    if (this->cab->getPosLivre() == -1)
    {
       pos = this->cab->getPosTopo();
-      this->cab->setPosCabeca(pos);
       node.setNode(this->out, pos);
       this->cab->incTopo();
       return pos;
    }
    pos = this->cab->getPosLivre();
-   this->cab->setPosCabeca(pos);
    BTreeNode aux = BTreeNode::getNode(this->in, pos);
    node.setNode(this->out, pos);
    this->cab->setPosLivre(aux.getProx());
    return pos;
 }
 
+/* brief: Remove uma chave da arvore B do arquivo de indices, retornando
+* a posicao que esta condido o dado no arquivo de dados
+* param: chave a ser removida
+* return: posicao que esta condido o dado no arquivo de dados
+* pre: nenhuma
+* pos: chave e removida da arvore
+*/
 int ArquivoIndice::remove (int chave)
 {
    if (this->cab->getPosRaiz() == -1)
@@ -181,6 +183,11 @@ int ArquivoIndice::remove (int chave)
    return pos;
 }
 
+/* brief: funcao auxiliar do metodo remover que remove uma chave da arvore B
+* param: posicao do No atual e chave a ser removida
+* pre: nenhuma
+* pos: chave removido se presente no No atual
+*/
 int ArquivoIndice::removeAux (int pos, int chave)
 {
    BTreeNode atual = BTreeNode::getNode(this->in, pos);   
@@ -260,6 +267,11 @@ int ArquivoIndice::removeAux (int pos, int chave)
    return retorno;
 }
 
+/* brief: funcao auxiliar que remove uma chave que esta na folha
+* param: posicao do No atual e posicao da chave a ser removida do No
+* pre: chave deve estar contida neste No
+* pos: chave removida
+*/
 void ArquivoIndice::removeDaFolha (int pos, int posChave)
 {
    BTreeNode atual = BTreeNode::getNode(this->in, pos);
@@ -273,6 +285,12 @@ void ArquivoIndice::removeDaFolha (int pos, int posChave)
    atual.setNode(this->out, pos);
 }
 
+/* brief: funcao auxiliar que remove uma chave que nao esta na folha
+* removendo tambem recursivamente a chave predecessora
+* param: posicao do No atual e posicao da chave a ser removida do No
+* pre: nenhuma
+* pos: chave removida
+*/
 void ArquivoIndice::removeNaoFolha (int pos, int posChave)
 {
    BTreeNode atual = BTreeNode::getNode(this->in, pos);
@@ -289,6 +307,12 @@ void ArquivoIndice::removeNaoFolha (int pos, int posChave)
    atual.setNode(this->out, pos);
 }
 
+/* brief: funcao que redistribui as chaves de um No com seu pai e irmao
+* da esquerda para a direita
+* param: posicao do No atual e posicao da chave a ser removida do No
+* pre: nenhuma
+* pos: empreestimo feito
+*/
 void  ArquivoIndice::emprestaEsquerda (int pos, int posChave)
 {
    BTreeNode atual = BTreeNode::getNode(this->in, pos);
@@ -320,6 +344,12 @@ void  ArquivoIndice::emprestaEsquerda (int pos, int posChave)
    irmao.setNode(this->out, atual.filhos[posChave - 1]);   
 }
 
+/* brief: funcao que redistribui as chaves de um No com seu pai e irmao
+* da direita para a esquerda
+* param: posicao do No atual e posicao da chave a ser removida do No
+* pre: nenhuma
+* pos: empreestimo feito
+*/
 void ArquivoIndice::emprestaDireita (int pos, int posChave)
 {
    BTreeNode atual = BTreeNode::getNode(this->in, pos);
@@ -353,6 +383,12 @@ void ArquivoIndice::emprestaDireita (int pos, int posChave)
    irmao.setNode(this->out, atual.filhos[posChave + 1]);
 }
 
+/* brief: intercala dois irmaos com uma chave do No pai
+* da direita para a esquerda
+* param: posicao do No atual e posicao da chave a ser removida do No
+* pre: nenhuma
+* pos: intercalacao efetuada e No irmao removido da arvore
+*/
 void ArquivoIndice::mergeDireita (int pos, int posChave)
 {
    BTreeNode atual = BTreeNode::getNode(this->in, pos);
@@ -360,6 +396,7 @@ void ArquivoIndice::mergeDireita (int pos, int posChave)
    BTreeNode irmao = BTreeNode::getNode(this->in, atual.filhos[posChave + 1]);
 
    int posRemove = atual.filhos[posChave + 1];
+   int test = atual.filhos[posChave];
 
    //2 = minimo de chaves
    filho.chaves[1]  = atual.chaves[posChave];
@@ -387,10 +424,14 @@ void ArquivoIndice::mergeDireita (int pos, int posChave)
    atual.setNode(this->out, pos);
    filho.setNode(this->out, atual.filhos[posChave]);
    removeLista(posRemove);
-   
 }
 
-//precondicao: apenas pode ser chamada para o No mais a direita
+/* brief: intercala dois irmaos com uma chave do No pai
+* da esquerda para a direita
+* param: posicao do No atual e posicao da chave a ser removida do No
+* pre: Apenas pode ser chamada para o caso do No filho mais a direita
+* pos: intercalacao efetuada e No irmao removido da arvore
+*/
 void ArquivoIndice::mergeEsquerda (int pos, int posChave)
 {
    BTreeNode atual = BTreeNode::getNode(this->in, pos);
@@ -418,16 +459,11 @@ void ArquivoIndice::mergeEsquerda (int pos, int posChave)
    removeLista(posRemove);
 }
 
-void ArquivoIndice::getSuc (int pos, int &chaveSuc, int &indiceSuc) 
-{ 
-   BTreeNode atual = BTreeNode::getNode(this->in, pos);
-   while (!atual.isLeaf())
-      atual = BTreeNode::getNode(this->in, atual.filhos[0]);
-
-   chaveSuc  = atual.chaves[0];
-   indiceSuc = atual.indices[0]; 
-}
-
+/* brief: obtem a chave predecessora
+* param: posicao da chave, chaveAnt e indiceAnt serao passados como referencia
+* pre: nenhuma
+* pos: chave e indice predecessor obtidos
+*/
 void ArquivoIndice::getAnt (int pos, int &chaveAnt, int &indiceAnt) 
 { 
    BTreeNode atual = BTreeNode::getNode(this->in, pos);
@@ -438,47 +474,27 @@ void ArquivoIndice::getAnt (int pos, int &chaveAnt, int &indiceAnt)
    indiceAnt = atual.indices[atual.numChaves - 1]; 
 } 
 
+/* brief: Remove um No inteiro do arquivo
+* param: posicao do No a ser removido
+* pre: posicao valida
+* pos: No removido e encadeado na lista de Nos livres
+*/
 void ArquivoIndice::removeLista (int pos)
 {
-   BTreeNode atual = BTreeNode::getNode(this->in, pos);
+   BTreeNode atual = BTreeNode:: getNode(this->in, pos);
 
-   //remocao na cabeca
-   if (pos == this->cab->getPosCabeca())
-   {
-      this->cab->setPosCabeca(atual.getProx());
-      if (atual.getProx() != -1)
-      {
-         BTreeNode prox = BTreeNode::getNode(this->in, atual.getProx());
-         prox.setAnt(-1);  
-         prox.setNode(this->out, atual.getProx());
-      }
-   }
-   //remocao no meio
-   else
-   {
-      //proximo do anterior -> proximo
-      BTreeNode ant = BTreeNode::getNode(this->in, atual.getAnt());
-      ant.setProx(atual.getProx());
-      ant.setNode(this->out, atual.getAnt());
-
-      //nao eh a calda
-      if (atual.getProx() != -1)
-      {
-         //anterior do proximo -> anterior.
-         BTreeNode prox = BTreeNode::getNode(this->in, atual.getProx());
-         prox.setAnt(atual.getAnt());
-         prox.setNode(this->out, atual.getProx());
-      }
-   }
    //Encadeando o No removido na lista de livres
    atual.setProx(this->cab->getPosLivre());
-   atual.setAnt(-1);
    atual.setNode(this->out, pos);
-
-   this->cab->setPosLivre(pos); //posCabeca;
+   this->cab->setPosLivre(pos);
    this->cab->setCabecalho(this->out);
 }
 
+/* brief: obtem a altura da arvore B presente no arquivo
+* return: altura da arovre
+* pre: nenhuma
+* pos: altura retornada
+*/
 int ArquivoIndice::altura ()
 {
    if (this->cab->getPosRaiz() == -1)
@@ -488,6 +504,12 @@ int ArquivoIndice::altura ()
    return this->alturaAux(raiz.filhos[0]);
 }
 
+/* brief: funcao auxiliar que procura a altura recursivamente, da arvore
+* param: posicao do No atual
+* retorno: 1 e chama recursivamente para o proximo no (caso o atual n for nulo)
+* pre: nenhuma
+* pos: nenhuma
+*/
 int ArquivoIndice::alturaAux (int pos)
 {
    if (pos == -1) return 1;
@@ -496,6 +518,11 @@ int ArquivoIndice::alturaAux (int pos)
    return 1 + this->alturaAux(no.filhos[0]);
 }
 
+/* brief: imprime na tela as chaves da arvore B de um determinado nivel
+* param: nivel atual e posicao do No atual
+* pre: nivel ser valido
+* pos: chaves exibidas na tela
+*/
 void ArquivoIndice::mostraNivel (int nivel, int pos)
 {
    BTreeNode no = BTreeNode::getNode(this->in, pos);
@@ -514,6 +541,10 @@ void ArquivoIndice::mostraNivel (int nivel, int pos)
    } 
 }  
 
+/* brief: imprime a arvore por completo por nivel
+* pre: nenhuma
+* pos: arvore exibida caso nao seja vazia
+*/
 void ArquivoIndice::mostrarPorNivel ()
 {
    Util::clear();
@@ -542,6 +573,11 @@ void ArquivoIndice::mostrarPorNivel ()
    Util::pressRetornar();
 }
 
+/* brief: Obtem todos os indices em ordem crescente da posicao dos dados
+* return: vetor de inteiro com os indices ordenados
+* pre: nenhuma
+* pos: indices obtidos
+*/
 std::vector<int> ArquivoIndice::getIndices ()
 {
    std::vector<int> indices;
@@ -552,6 +588,11 @@ std::vector<int> ArquivoIndice::getIndices ()
    return indices;
 }
 
+/* brief: funcao auxiliar para obter os indices em ordem crescente da arvore
+* param: posicao do No atual do no e vetor de indices por referencia
+* pre: nenhuma
+* pos: indice armazenado caso exista no No
+*/
 void ArquivoIndice::getIndicesAux (int pos, std::vector<int> &indices)
 {
    BTreeNode no = BTreeNode::getNode(this->in, pos);
@@ -567,6 +608,12 @@ void ArquivoIndice::getIndicesAux (int pos, std::vector<int> &indices)
       this->getIndicesAux(no.filhos[i], indices);
 }
 
+/* brief: obtem um indice do arquivo de dados a partir de uma chave da arvore
+* param: chave
+* return: indice do arquivo de dados que relaciona com a chave
+* pre: nenhuma
+* pos: indice obtido
+*/
 int ArquivoIndice::getIndice (int chave)
 {
    if (this->cab->getPosRaiz() == -1)
@@ -575,6 +622,12 @@ int ArquivoIndice::getIndice (int chave)
    return getIndiceAux (chave, this->cab->getPosRaiz());
 }
 
+/* brief: funcao auxiliar que procura pelo indice relacionado a uma chave
+* param: chave e posicao atual
+* return: indice obtido caso a chave esteja no No atual
+* pre: nenhuma
+* pos: nenhuma
+*/
 int ArquivoIndice::getIndiceAux (int chave, int pos)
 {
    if (pos == -1) return -1;
@@ -590,6 +643,10 @@ int ArquivoIndice::getIndiceAux (int chave, int pos)
    return getIndiceAux(chave, no.filhos[i]);
 }
 
+/* brief: destrutor da classe, responsavel por desalocar da memoria o cabecalho 
+* pre: cabecalho alocado
+* pos: cabecalho desalocado
+*/
 ArquivoIndice::~ArquivoIndice ()
 {
    delete this->cab;

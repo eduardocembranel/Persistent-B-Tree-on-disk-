@@ -1,6 +1,11 @@
 #include "Medico.hpp"
 #include "Util.hpp"
 
+/* brief: mostra na tela os dados do médico
+* param: ponteiro para a saida de dados, ponteiro para o identificador do médico
+* pre: as informações do médico terem sido carregadas
+* pos: nenhuma
+*/
 std::ostream& operator<< (std::ostream &out, const Medico &medico)
 {
    out << "\n"
@@ -19,6 +24,10 @@ std::ostream& operator<< (std::ostream &out, const Medico &medico)
    return out;
 }
 
+/* brief: Seter da classe
+* pre: nenhuma
+* pos: nenhuma
+*/
 void Medico::setMedico ()
 {
    std::cout << "Nome: ";

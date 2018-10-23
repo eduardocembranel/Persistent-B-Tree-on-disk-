@@ -1,6 +1,14 @@
 #ifndef MEDICO_HPP
 #define MEDICO_HPP
 
+/*
+* \file Medico.hpp
+* \class Medico
+* \brief Classe que representa a entidade "Medico"
+* \author Carlos Pedroso
+* \author Eduardo Cembranel
+*/
+
 #include <iostream>
 
 #define STR_SIZE 100
@@ -21,7 +29,17 @@ class Medico
       char endereco[STR_SIZE];
       char nascimento[STR_SIZE];
 
+      /* brief: Seter da classe
+      * pre: nenhuma
+      * pos: nenhuma
+      */
       void setMedico ();
+
+      /* brief: mostra na tela os dados do médico
+      * param: ponteiro para a saida de dados, ponteiro para o identificador do médico
+      * pre: as informações do médico terem sido carregadas
+      * pos: nenhuma
+      */
       friend std::ostream& operator<< (std::ostream&, const Medico&);
 
 };

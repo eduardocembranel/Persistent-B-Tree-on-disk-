@@ -6,12 +6,20 @@
 #include "App.hpp"
 #include "Util.hpp"
 
+/* brief: construtor padrao: inicializa os arquivos de dados e indice
+* pre: nenhuma
+* pos: arquivos inicializados 
+*/
 App::App ()
 {
    arq  = new ArquivoDados("dados.bin");
    arq2 = new ArquivoIndice("indices.bin");
 }
 
+/* brief: faz a escolha da opção do usuário sobre qual função utilizar
+* pre: arquivos deve estar carregados
+* pos: levar o usuário a uma função escolhida 
+*/
 void App::run ()
 {
    int escolha;
@@ -53,7 +61,10 @@ void App::run ()
    } while (escolha != SAIR);
 }
 
-//insere o medico no arquivo de dados e a chave no arquivo de indice
+/* brief: insere o medico no arquivo de dados e a chave no arquivo de indice
+* pre: nenhum
+* pos: ter inserido o médico na arvore e no arquivo
+*/
 void App::insereDado ()
 {
    Util::clear();
@@ -121,8 +132,12 @@ void App::insereDado ()
    Util::pressRetornar();
 }
 
-//percorre chave por chave da arvore b, retornando o indice do arquivo de dados
-//correspondente ao dado, obtem o dado e imprime-o
+/* brief: percorre chave por chave da arvore b, 
+* retornando os indices do arquivo de dados correspondente aos dados, 
+* obtem os dados e imprime-os
+* pre: nenhum
+* pos: ter imprimido os dados dos médicos, caso existentam 
+*/
 void App::imprimirCadastro ()
 {
    std::vector<int> indices = this->arq2->getIndices();
@@ -140,6 +155,10 @@ void App::imprimirCadastro ()
    Util::pressRetornar();
 }
 
+/* brief: Faz a busca pelo médico desejado a partir do seu ID
+* pre: nenhuma
+* pos: mostrar na tela os dados do médico, caso exista
+*/
 void App::buscaMedico ()
 {
    Util::clear();
@@ -161,6 +180,10 @@ void App::buscaMedico ()
    Util::pressRetornar();
 }
 
+/* brief: Faz a remoção do médico a partir de um id buscado
+* pre: o usuário ter passado um id válido para busca
+* pos: os dados do médico terem sido removido 
+*/
 void App::removeMedico ()
 {
    Util::clear();
@@ -181,6 +204,10 @@ void App::removeMedico ()
    Util::pressRetornar();
 }
 
+/* brief: mostra na tela o menu de opções para o usuário
+* pre: nenhuma
+* pos: ter printado na tela as informações necessárias
+*/
 void App::mostraMenu ()
 {
    Util::clear();
@@ -196,6 +223,10 @@ void App::mostraMenu ()
              << ">> ";
 }
 
+/* brief: Faz a alteração dos dados já cafastrados do médico
+* pre: médico desejado ja ter sido inserido no arquivo
+* pos: ter alterado os dados do médico desejado
+*/
 void App::alteraMedico ()
 {
    Util::clear();
@@ -274,6 +305,10 @@ void App::alteraMedico ()
    Util::pressRetornar();
 }
 
+/* brief: Carrega o arquivo de dados para a memória
+* pre: o Arquivo existir e ser válido
+* pos: ter carregado parte do arquivo para a memória
+*/
 void App::carregaArquivo ()
 {
    Util::clear();
@@ -323,6 +358,10 @@ void App::carregaArquivo ()
    Util::pressRetornar();
 }
 
+/* brief: Verifica se os valores passados são validos
+* pre: passagem dos dados lidos do arquivo
+* pos: retornar se os valores são verdadeiros ou não
+*/
 bool App::ehValida (std::vector<std::string> vet)
 {
    if (vet.size() != 12)
@@ -338,6 +377,10 @@ bool App::ehValida (std::vector<std::string> vet)
    return true;
 }
 
+/* brief: esse é o destrutor da classe
+* pre: nenhuma
+* pos: liberar a memória alocada pelos arquivos
+*/
 App::~App ()
 {
    delete arq;

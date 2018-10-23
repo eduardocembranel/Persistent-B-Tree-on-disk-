@@ -2,50 +2,49 @@
 
 #include "ArquivoDados.hpp"
 
+/* brief: construtor: inicializa o arquivo e cabecalho do arquivo
+* pre: nenhuma
+* pos: arquivo e cabecalho inicializados 
+*/
 ArquivoDados::ArquivoDados (const std::string &fileName) : Arquivo(fileName)
 {  
    this->cab = new CabecalhoDados();
    this->cab->setCabecalho(this->out); //coloca o cabecalho no arquivo
 }
 
+/* brief: Faz a inserção de um médico na arvore
+* pre: arvore ja ter sido criada
+* pos: o dado ter sido inserido na arvore
+*/
 int ArquivoDados::insere (Medico medico)
 {
    int indice;
    NoMedico x;
    x.setMedico(medico);
-   x.setAnt(-1);
-   x.setProx(this->cab->getPosCabeca());
-
-   //faz a cabeca antiga apontar para o anterior (nova cabeca)
-   if (this->cab->getPosCabeca() != -1)
-   {
-      NoMedico prox = this->getData(this->cab->getPosCabeca());
-      if (this->cab->getPosLivre() == -1)
-         prox.setAnt(this->cab->getPosTopo());
-      else
-         prox.setAnt(this->cab->getPosLivre());
-      this->insereNo(&prox, this->cab->getPosCabeca());
-   }
    
-   if (this->cab->getPosLivre() == -1) //n ha Nos livres
+   //nao ha nós livres
+   if (this->cab->getPosLivre() == -1)
    {
-      this->insereNo(&x, this->cab->getPosTopo());
       indice = this->cab->getPosTopo();
-      this->cab->setPosCabeca(this->cab->getPosTopo());
+      this->insereNo(&x, indice);
       this->cab->incTopo();
    }
    else
    {
-      NoMedico aux = this->getData(this->cab->getPosLivre());
-      this->insereNo(&x, this->cab->getPosLivre());
       indice = this->cab->getPosLivre();
-      this->cab->setPosCabeca(this->cab->getPosLivre());
+      NoMedico aux = this->getData(indice);
+      this->insereNo(&x, indice);
       this->cab->setPosLivre(aux.getProx());
    }
    this->cab->setCabecalho(this->out);
    return indice;
 }
 
+/* brief: Faz a inserção de um novo nó na arvore
+* param: ponteiro para o elemento a ser inserido e a posição
+* pre: a arvore não estar vazia
+* pos: ter inserido o nó
+*/
 void ArquivoDados::insereNo (NoMedico *elem, int pos)
 {
    this->out.seekp(sizeof(CabecalhoDados) + pos * sizeof(NoMedico));
@@ -53,47 +52,27 @@ void ArquivoDados::insereNo (NoMedico *elem, int pos)
    this->out.flush();
 }
 
+/* brief: Faz a remoção de um nó
+* param:  a posição a ser removida
+* pre: haver uma arvore
+* pos: o elemento ter sido removido
+*/
 void ArquivoDados::remove (int pos)
 {
    NoMedico atual = this->getData(pos);
 
-   //remocao na cabeca
-   if (pos == this->cab->getPosCabeca())
-   {
-      this->cab->setPosCabeca(atual.getProx());
-      if (atual.getProx() != -1)
-      {
-         NoMedico prox = this->getData(atual.getProx());
-         prox.setAnt(-1);  
-         this->insereNo(&prox, atual.getProx());
-      }
-   }
-   //remocao no meio
-   else
-   {
-      //proximo do anterior -> proximo
-      NoMedico ant  = this->getData(atual.getAnt());
-      ant.setProx(atual.getProx());
-      this->insereNo(&ant, atual.getAnt());
-
-      //nao eh a calda
-      if (atual.getProx() != -1)
-      {
-         //anterior do proximo -> anterior.
-         NoMedico prox = this->getData(atual.getProx());
-         prox.setAnt(atual.getAnt());
-         this->insereNo(&prox, atual.getProx());
-      }      
-   }
    //Encadeando o No removido na lista de livres
    atual.setProx(this->cab->getPosLivre());
-   atual.setAnt(-1);
    this->cab->setPosLivre(pos);
    this->insereNo(&atual, pos);
    
    this->cab->setCabecalho(this->out);
 }
 
+/* brief: Recolhe os dados do médico
+* pre: nenhum
+* pos: retorna os dados 
+*/
 NoMedico ArquivoDados::getData (int pos)
 {
    NoMedico x;
@@ -102,6 +81,10 @@ NoMedico ArquivoDados::getData (int pos)
    return x;
 }
 
+/* brief: destrutor: desaloca memoria do cabecalho do arquivo
+* pre: cabecalho alocado
+* pos: cabecalho desalocado 
+*/
 ArquivoDados::~ArquivoDados ()
 {
    delete this->cab;
